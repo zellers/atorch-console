@@ -1,20 +1,19 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Route, Switch } from 'react-router';
-import { ConnectedRouter } from 'connected-react-router';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { configureStore, history } from './configureStore';
+import { configureStore } from './configureStore';
 import { AtorchConsole } from './components/AtorchConsole';
 
 const store = configureStore();
 
 const Entry: React.FC = () => (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Switch>
-        <Route exact path='/' component={AtorchConsole} />
-      </Switch>
-    </ConnectedRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<AtorchConsole />} />
+      </Routes>
+    </BrowserRouter>
   </Provider>
 );
 

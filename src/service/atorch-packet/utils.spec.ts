@@ -11,7 +11,7 @@ describe('Parser', () => {
     const packet = readPacket(Buffer.alloc(10));
     assert.isUndefined(packet);
   });
-  const packets: Record<string, NewableFunction> = {
+  const packets: Record<string, new (...args: any[]) => any> = {
     FF55010100090400000E0000040000000000006401F40085002F00000A093C0000000039: ACMeterPacket,
     FF55010200011A0000000004D40000002000006400000000002A00590E343C000000003F: DCMeterPacket,
     FF5501030001F3000000000638000003110007000A000000122E333C000000000000004E: USBMeterPacket,
@@ -20,7 +20,7 @@ describe('Parser', () => {
   for (const [packet, Type] of Object.entries(packets)) {
     it(`readPacket: ${Type.name}`, () => {
       const parsed = readPacket(Buffer.from(packet, 'hex'));
-      assert.instanceOf(parsed, Type);
+      assert.instanceOf(parsed, Type as any);
     });
   }
 });

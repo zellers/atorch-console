@@ -1,4 +1,4 @@
-import _ from 'lodash-es';
+import { clamp } from 'lodash-es';
 import { HEADER } from './asserts';
 import { MessageType } from './types';
 import { makeChecksum } from './utils';
@@ -26,10 +26,10 @@ export default {
     return makeCommandPacket(type, 0x05);
   },
   setBacklightTime(type: number, time: number) {
-    return makeCommandPacket(type, 0x21, _.clamp(time, 0, 60));
+    return makeCommandPacket(type, 0x21, clamp(time, 0, 60));
   },
   setPrice(type: number, price: number) {
-    return makeCommandPacket(type, 0x22, _.clamp(price, 1, 999999));
+    return makeCommandPacket(type, 0x22, clamp(price, 1, 999999));
   },
   setPlus(type: number) {
     return makeCommandPacket(type, type !== 3 ? 0x11 : 0x33);

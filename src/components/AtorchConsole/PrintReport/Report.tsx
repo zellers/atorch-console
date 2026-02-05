@@ -1,24 +1,24 @@
 import classNames from 'classnames';
-import _ from 'lodash-es';
+import { map } from 'lodash-es';
 import React from 'react';
 import { Table } from 'reactstrap';
-import locals from './index.scss';
+import * as locals from './index.scss';
 
 interface Props {
   record: React.ReactNode[][];
 }
 
 export const Report: React.FC<Props> = ({ record }) => (
-  <Table hover borderless size='sm' className={locals.table}>
+  <Table hover borderless size='sm'>
     <thead>
       <tr>
         <th className={classNames('text-right', locals.name)}>#</th>
-        <th className={locals.value}>Value</th>
+        <th>Value</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      {_.map(record, ([name, value, button], index) => (
+      {map(record, ([name, value, button], index: number) => (
         <tr key={index}>
           <td className={classNames('text-monospace', 'text-right')}>{name}</td>
           <td>{value}</td>

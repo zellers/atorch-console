@@ -18,6 +18,16 @@ interface Events {
 
 export class AtorchService {
   public static async requestDevice() {
+    if (!navigator.bluetooth) {
+      throw new Error(
+        'Web Bluetooth API is not available in this browser.\n\n' +
+        'Please use Chrome, Edge, or Opera and enable Web Bluetooth:\n' +
+        '1. Chrome: Visit chrome://flags/#enable-web-bluetooth\n' +
+        '2. Make sure you\'re using HTTPS\n' +
+        '3. Safari does not support Web Bluetooth'
+      );
+    }
+    
     const device = await navigator.bluetooth.requestDevice({
       filters: [{ services: [UUID_SERVICE] }],
     });
@@ -53,7 +63,7 @@ export class AtorchService {
   public async sendCommand(block: Buffer) {
     assertPacket(block, MessageType.Command);
     const characteristic = await this.getCharacteristic();
-    await characteristic?.writeValue(block);
+    await characteristic?.writeValue(block.buffer as ArrayBuffer);
   }
 
   private getCharacteristic = async () => {
@@ -72,7 +82,8 @@ export class AtorchService {
 
   private handleValueChanged = (event: Event) => {
     const target = event.target as BluetoothRemoteGATTCharacteristic;
-    const payload = Buffer.from(target.value?.buffer ?? []);
+    const buffer = target.value?.buffer;
+    const payload = buffer ? Buffer.from(buffer) : Buffer.from([]);
     if (payload.indexOf(HEADER) === 0) {
       if (this.blocks.length !== 0) {
         this.emitBlock(Buffer.concat(this.blocks));

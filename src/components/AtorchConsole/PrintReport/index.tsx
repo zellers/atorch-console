@@ -1,14 +1,15 @@
 /* eslint-disable react/jsx-key */
-import _ from 'lodash-es';
+import { toFinite, inRange } from 'lodash-es';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Row } from 'reactstrap';
 import { sendCommand } from '../../../actions/atorch';
 import { ACMeterPacket, CommandSet, DCMeterPacket, MeterPacketType, USBMeterPacket } from '../../../service/atorch-packet';
-import locals from './index.scss';
+import * as locals from './index.scss';
 import { Report } from './Report';
 import { Toolbar } from './Toolbar';
 import { FormattedUnit } from './utils';
+import { AppDispatch } from '../../../configureStore';
 
 interface Props {
   packet?: MeterPacketType;
@@ -80,10 +81,10 @@ export const PrintReport: React.FC<Props> = ({ packet }) => {
   );
 };
 
-const Command: React.FC<{
+const Command: React.FC<React.PropsWithChildren<{
   onClick: () => Buffer | undefined;
-}> = (props) => {
-  const dispatch = useDispatch();
+}>> = (props) => {
+  const dispatch = useDispatch<AppDispatch>();
   const handleClick = () => {
     dispatch(sendCommand(props.onClick()));
   };
@@ -102,7 +103,7 @@ const SetupPriceCommand: React.FC<{ type: number; value: number }> = ({ type, va
       return;
     }
     console.log(price);
-    return CommandSet.setPrice(type, _.toFinite(price * 100));
+    return CommandSet.setPrice(type, toFinite(price * 100));
   };
   return <Command onClick={onClick}>Setup</Command>;
 };
@@ -114,7 +115,7 @@ const SetupBacklightTimeCommand: React.FC<{ type: number; value: number }> = ({ 
       alert(`input unexpected (0 to 60)`);
       return;
     }
-    return CommandSet.setBacklightTime(type, _.toFinite(time));
+    return CommandSet.setBacklightTime(type, toFinite(time));
   };
   return <Command onClick={onClick}>Setup</Command>;
 };
@@ -142,7 +143,7 @@ function getCO2(wh: number) {
 function prompt(message: string, defaultValue: number, minValue: number, maxValue: number) {
   const returns = globalThis.prompt(message, String(defaultValue));
   const price = Number.parseFloat(returns ?? '-1');
-  if (!_.inRange(price, minValue, maxValue)) {
+  if (!inRange(price, minValue, maxValue)) {
     return;
   }
   return price;

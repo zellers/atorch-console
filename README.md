@@ -1,5 +1,21 @@
 # Atorch Console
 
+---
+
+**_NOTE_**
+
+This is a fork of https://github.com/CursedHardware/atorch-console which was archived by the owner on Jul 27, 2021.
+
+My intention is to:
+
+- Update to Node 24 (done)
+- Fix some decoding issues for DL24 (in progress)
+- Improve/add logging and graphing (not yet started)
+
+The current state is that the project runs on Node 24 with all it's faults and flaws it always had. YMMV.
+
+---
+
 ![Publish](https://github.com/NiceLabs/atorch-console/workflows/Publish/badge.svg)
 
 The console based Web Bluetooth.

@@ -1,9 +1,10 @@
-import _ from 'lodash-es';
+import { map } from 'lodash-es';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, ButtonGroup } from 'reactstrap';
 import { sendCommand } from '../../../actions/atorch';
 import { CommandSet } from '../../../service/atorch-packet';
+import { AppDispatch } from '../../../configureStore';
 
 interface Props {
   type: number;
@@ -11,7 +12,7 @@ interface Props {
 
 // eslint-disable-next-line react/display-name
 export const Toolbar = React.memo<Props>(({ type }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const btnFn: Record<string, () => Buffer> = {
     'Setup': CommandSet.setup.bind(null, type),
     '\u2795': CommandSet.setPlus.bind(null, type),
@@ -24,7 +25,7 @@ export const Toolbar = React.memo<Props>(({ type }) => {
   };
   return (
     <ButtonGroup>
-      {_.map(btnFn, (builder, text) => (
+      {map(btnFn, (builder: () => Buffer, text: string) => (
         <Button key={text} outline onClick={makeCommand(builder)}>
           {text}
         </Button>
