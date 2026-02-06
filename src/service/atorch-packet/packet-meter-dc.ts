@@ -11,6 +11,7 @@ export class DCMeterPacket {
   public readonly mAmpere: number;
   public readonly mWh: number;
   public readonly mWatt: number;
+  public readonly mAh: number;
   public readonly price: number;
   public readonly fee: number;
   public readonly temperature: number;
@@ -22,7 +23,8 @@ export class DCMeterPacket {
     assertMeterPacket(block, type, 'DC Meter');
     this.mVoltage = readUInt24BE(block, 0x04) * 100;
     this.mAmpere = readUInt24BE(block, 0x07);
-    this.mWh = block.readUInt32BE(0x0a) * 10;
+    this.mWh = block.readUInt32BE(0x0d) * 10000;
+    this.mAh = readUInt24BE(block, 0x0a) * 10;
     this.mWatt = Math.round((this.mVoltage * this.mAmpere) / 1000);
     this.price = readUInt24BE(block, 0x11) / 100;
     this.fee = this.mWh * (this.price / 1000000);

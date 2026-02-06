@@ -45,6 +45,7 @@ export const PrintReport: React.FC<Props> = ({ packet }) => {
       ['Ampere', <FormattedUnit value={packet.mAmpere} unit='A' />],
       ['Watt', <FormattedUnit value={packet.mWatt} unit='W' />],
       ['W·h', <FormattedUnit value={packet.mWh} unit='W·h' />, <Command onClick={CommandSet.resetWh.bind(null, type)}>Reset</Command>],
+      ['A·h', <FormattedUnit value={packet.mAh} unit='A·h' />],
       [CO2Name, <FormattedUnit value={getCO2(packet.mWh)} unit='g' />],
       ['Price', `${packet.price.toFixed(2)} $/kW·h`, <SetupPriceCommand type={type} value={packet.price} />],
       ['Fee', `${packet.fee.toFixed(5)} $`],
